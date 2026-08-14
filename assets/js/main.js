@@ -130,11 +130,11 @@
     });
   }
 
-  // ── Contact Form AJAX submission ───────────────────────────────────────────
   const form      = document.getElementById('contactForm');
   const submitBtn = document.getElementById('submitBtn');
   const submitTxt = document.getElementById('submitText');
   const formAlert = document.getElementById('formAlert');
+  const baseUrl   = '';
 
   if (form) {
     form.addEventListener('submit', async function (e) {
@@ -160,10 +160,17 @@
       if (submitTxt) submitTxt.textContent = 'Sending…';
 
       try {
-        const data = new FormData(form);
+        const csrfToken = (form.querySelector('[name="csrf_token"]') || {}).value || '';
         const res  = await fetch(baseUrl + '/contact_submit', {
           method: 'POST',
-          body: data,
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            name: document.getElementById('senderName').value.trim(),
+            email: document.getElementById('senderEmail').value.trim(),
+            subject: (document.getElementById('senderSubject') || {}).value || '',
+            message: document.getElementById('senderMessage').value.trim(),
+            csrf_token: csrfToken
+          }).toString()
         });
         const json = await res.json();
 
