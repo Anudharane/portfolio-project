@@ -1,0 +1,75 @@
+<%- include('header') %>
+
+<div class="row g-3">
+  <div class="col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6 class="card-title mb-3">
+          <i class="fa-solid fa-concierge-bell me-2 text-primary"></i>
+          <%= editRow ? 'Edit Service' : 'Add Service' %>
+        </h6>
+        <form method="POST" action="/admin/add_services" class="row g-2">
+          <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+          <input type="hidden" name="id" value="<%= editRow ? editRow.id : 0 %>">
+
+          <div class="col-12">
+            <label class="form-label">Service Name *</label>
+            <input type="text" name="service_name" class="form-control" required
+                   value="<%= editRow ? e(editRow.service_name) : '' %>" placeholder="Web Development">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Font Awesome Icon Class</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="<%= editRow ? e(editRow.icon) : 'fa-solid fa-star' %>" id="iconPreview"></i></span>
+              <input type="text" name="icon" class="form-control" id="iconInput"
+                     placeholder="fa-solid fa-code" value="<%= editRow ? e(editRow.icon) : 'fa-solid fa-code' %>"
+                     oninput="document.getElementById('iconPreview').className = this.value">
+            </div>
+            <small class="text-muted">Explore icons at <a href="https://fontawesome.com/search?o=r&m=free" target="_blank" class="text-info">fontawesome.com</a></small>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Description</label>
+            <textarea name="description" rows="4" class="form-control"
+                      placeholder="Briefly describe what you offer..."><%= editRow ? e(editRow.description) : '' %></textarea>
+          </div>
+          <div class="col-12 mt-1">
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="fa-solid fa-floppy-disk me-1"></i><%= editRow ? 'Update Service' : 'Add Service' %>
+            </button>
+            <% if (editRow) { %>
+            <a href="/admin/add_services" class="btn btn-outline-secondary w-100 mt-2">Cancel</a>
+            <% } %>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <table class="table table-hover align-middle" id="dataTable">
+          <thead>
+            <tr><th>#</th><th>Icon</th><th>Name</th><th>Description</th><th class="text-end">Actions</th></tr>
+          </thead>
+          <tbody>
+            <% let idx = 1; services.forEach(row => { %>
+            <tr>
+              <td><%= idx++ %></td>
+              <td><i class="<%= e(row.icon) %> fa-lg text-primary"></i></td>
+              <td class="fw-bold"><%= e(row.service_name) %></td>
+              <td><small class="text-muted"><%= e(row.description) %></small></td>
+              <td class="text-end">
+                <a href="/admin/add_services?edit=<%= row.id %>" class="btn btn-sm btn-outline-primary me-1"><i class="fa-solid fa-pen"></i></a>
+                <a href="/admin/add_services?delete=<%= row.id %>" class="btn btn-sm btn-outline-danger btn-delete" data-label="<%= e(row.service_name) %>"><i class="fa-solid fa-trash"></i></a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('footer') %>

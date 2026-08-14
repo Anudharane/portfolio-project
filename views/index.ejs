@@ -1,0 +1,735 @@
+<%
+const base_url = typeof baseUrl !== 'undefined' ? baseUrl : '';
+const siteTitle = (typeof settings !== 'undefined' && settings.website_title) ? settings.website_title : 'My Portfolio';
+const heroName = (typeof hero !== 'undefined' && hero.name) ? hero.name : '';
+const favicon = (typeof settings !== 'undefined' && settings.favicon) ? base_url + '/uploads/logo/' + settings.favicon : null;
+const metaDesc = (typeof settings !== 'undefined' && settings.meta_desc) ? settings.meta_desc : 'Professional portfolio of ' + heroName;
+const metaKw = (typeof settings !== 'undefined' && settings.meta_keywords) ? settings.meta_keywords : 'portfolio, developer, web developer, programmer';
+const pageTitle = heroName ? heroName + ' | ' + siteTitle : siteTitle;
+
+const showHero         = typeof settings === 'undefined' || settings.show_hero === undefined         || Number(settings.show_hero) === 1;
+const showAbout        = typeof settings === 'undefined' || settings.show_about === undefined        || Number(settings.show_about) === 1;
+const showSkills       = typeof settings === 'undefined' || settings.show_skills === undefined       || Number(settings.show_skills) === 1;
+const showEducation    = typeof settings === 'undefined' || settings.show_education === undefined    || Number(settings.show_education) === 1;
+const showExperience   = typeof settings === 'undefined' || settings.show_experience === undefined   || Number(settings.show_experience) === 1;
+const showInternship   = typeof settings === 'undefined' || settings.show_internship === undefined   || Number(settings.show_internship) === 1;
+const showProjects     = typeof settings === 'undefined' || settings.show_projects === undefined     || Number(settings.show_projects) === 1;
+const showCertificates = typeof settings === 'undefined' || settings.show_certificates === undefined || Number(settings.show_certificates) === 1;
+const showServices     = typeof settings === 'undefined' || settings.show_services === undefined     || Number(settings.show_services) === 1;
+const showContact      = typeof settings === 'undefined' || settings.show_contact === undefined      || Number(settings.show_contact) === 1;
+
+const heroPhoto = (typeof hero !== 'undefined' && hero && hero.profile_photo)
+  ? base_url + '/uploads/profile/' + hero.profile_photo
+  : base_url + '/assets/images/default-avatar.png';
+const heroBg = (typeof hero !== 'undefined' && hero && hero.background_image)
+  ? base_url + '/uploads/profile/' + hero.background_image
+  : null;
+
+const expYears = (typeof about !== 'undefined' && about && about.experience) ? about.experience : '';
+const totalProj = (typeof projects !== 'undefined' && projects) ? projects.length : 0;
+const totalCerts = (typeof certificates !== 'undefined' && certificates) ? certificates.length : 0;
+
+const typedStrings = [];
+if (typeof hero !== 'undefined' && hero) {
+  if (hero.profession) typedStrings.push(hero.profession);
+  if (hero.subtitle) typedStrings.push(hero.subtitle);
+}
+if (typedStrings.length === 0) {
+  typedStrings.push('Developer', 'Designer');
+}
+const typedJson = JSON.stringify(typedStrings);
+
+function escapeHtml(text) {
+  if (!text) return '';
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+function nl2br(text) {
+  if (!text) return '';
+  return escapeHtml(text).replace(/\r\n|\r|\n/g, '<br>');
+}
+%>
+<%- include('includes/header') %>
+<body>
+<%- include('includes/navbar') %>
+
+<% if (showHero) { %>
+<!-- ═══════════════════════════════════════════════════
+     HERO SECTION
+═══════════════════════════════════════════════════ -->
+<section id="home" class="hero-section"
+  <%- heroBg ? 'style="background-image:url(\'' + heroBg + '\');background-size:cover;background-position:center;"' : '' %>>
+  <div class="hero-bg-overlay"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+  <div class="container hero-content">
+    <div class="row align-items-center g-5">
+      <!-- Text -->
+      <div class="col-lg-6" data-aos="fade-right" data-aos-duration="900">
+        <div class="hero-greeting">
+          <i class="fa-solid fa-hand-wave"></i> Hello, World!
+        </div>
+        <h1 class="hero-name"><%= (typeof hero !== 'undefined' && hero && hero.name) ? hero.name : 'Your Name' %></h1>
+        <div class="hero-profession" id="typed-wrapper">
+          I'm a <span id="typed-text"></span>
+        </div>
+        <p class="hero-description"><%- (typeof hero !== 'undefined' && hero) ? nl2br(hero.short_description) : '' %></p>
+
+        <div class="hero-actions">
+          <% if (showContact) { %>
+          <a href="#contact" class="btn-primary-grad">
+            <i class="fa-solid fa-paper-plane"></i> Hire Me
+          </a>
+          <% } %>
+          <% if (showProjects) { %>
+          <a href="#projects" class="btn-outline-grad">
+            <i class="fa-solid fa-briefcase"></i> My Work
+          </a>
+          <% } %>
+          <% if (typeof hero !== 'undefined' && hero && hero.resume) { %>
+          <a href="<%= base_url %>/uploads/resumes/<%= hero.resume %>" target="_blank" class="btn-outline-grad">
+            <i class="fa-solid fa-download"></i> Resume
+          </a>
+          <% } %>
+        </div>
+
+        <!-- Mini stats -->
+        <div class="hero-stats">
+          <% if (expYears) { %>
+          <div class="hero-stat">
+            <span class="stat-num"><%= expYears %></span>
+            <span class="stat-lbl">Experience</span>
+          </div>
+          <% } %>
+          <% if (totalProj > 0) { %>
+          <div class="hero-stat">
+            <span class="stat-num"><%= totalProj %>+</span>
+            <span class="stat-lbl">Projects</span>
+          </div>
+          <% } %>
+          <% if (totalCerts > 0) { %>
+          <div class="hero-stat">
+            <span class="stat-num"><%= totalCerts %>+</span>
+            <span class="stat-lbl">Certificates</span>
+          </div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Photo -->
+      <div class="col-lg-6 text-center" data-aos="fade-left" data-aos-duration="900">
+        <div class="hero-img-wrapper">
+          <div class="hero-img-ring">
+            <div class="hero-img-inner">
+              <img src="<%= heroPhoto %>" alt="<%= (typeof hero !== 'undefined' && hero && hero.name) ? hero.name : 'Profile Photo' %>">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll Indicator -->
+  <div class="hero-scroll">
+    <div class="scroll-dot"></div>
+    <span>Scroll Down</span>
+  </div>
+</section>
+<% } %>
+
+<% if (showAbout) { %>
+<!-- ═══════════════════════════════════════════════════
+     ABOUT SECTION
+═══════════════════════════════════════════════════ -->
+<section id="about" class="about-section">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <!-- Image -->
+      <div class="col-lg-5" data-aos="fade-right">
+        <div class="about-img-wrapper">
+          <img src="<%= heroPhoto %>" alt="<%= (typeof hero !== 'undefined' && hero && hero.name) ? hero.name : 'About' %>">
+          <% if (totalProj > 0) { %>
+          <div class="about-img-badge badge-exp">
+            <span class="badge-num"><%= totalProj %>+</span>
+            <span class="badge-lbl">Projects Done</span>
+          </div>
+          <% } %>
+          <% if (totalCerts > 0) { %>
+          <div class="about-img-badge badge-proj">
+            <span class="badge-num"><%= totalCerts %>+</span>
+            <span class="badge-lbl">Certificates</span>
+          </div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Text -->
+      <div class="col-lg-7" data-aos="fade-left">
+        <div class="section-tag"><i class="fa-solid fa-user me-1"></i> Get to know me</div>
+        <h2 class="section-title"><%= (typeof about !== 'undefined' && about && about.title) ? about.title : 'About Me' %></h2>
+        <p class="about-description"><%- (typeof about !== 'undefined' && about) ? nl2br(about.description) : '' %></p>
+
+        <div class="about-info-grid">
+          <% if (typeof about !== 'undefined' && about && about.birthday) { %>
+          <div class="about-info-item">
+            <span class="info-label"><i class="fa-solid fa-cake-candles me-1"></i> Birthday</span>
+            <span class="info-value"><%= about.birthday %></span>
+          </div>
+          <% } %>
+          <% if (typeof about !== 'undefined' && about && about.email) { %>
+          <div class="about-info-item">
+            <span class="info-label"><i class="fa-solid fa-envelope me-1"></i> Email</span>
+            <span class="info-value"><%= about.email %></span>
+          </div>
+          <% } %>
+          <% if (typeof about !== 'undefined' && about && about.phone) { %>
+          <div class="about-info-item">
+            <span class="info-label"><i class="fa-solid fa-phone me-1"></i> Phone</span>
+            <span class="info-value"><%= about.phone %></span>
+          </div>
+          <% } %>
+          <% if (typeof about !== 'undefined' && about && about.city) { %>
+          <div class="about-info-item">
+            <span class="info-label"><i class="fa-solid fa-location-dot me-1"></i> City</span>
+            <span class="info-value"><%= about.city %></span>
+          </div>
+          <% } %>
+          <% if (typeof about !== 'undefined' && about && about.degree) { %>
+          <div class="about-info-item">
+            <span class="info-label"><i class="fa-solid fa-graduation-cap me-1"></i> Degree</span>
+            <span class="info-value"><%= about.degree %></span>
+          </div>
+          <% } %>
+          <% if (typeof about !== 'undefined' && about && about.experience) { %>
+          <div class="about-info-item">
+            <span class="info-label"><i class="fa-solid fa-briefcase me-1"></i> Experience</span>
+            <span class="info-value"><%= about.experience %></span>
+          </div>
+          <% } %>
+          <% if (typeof about !== 'undefined' && about && about.freelance_status) { %>
+          <div class="about-info-item">
+            <span class="info-label"><i class="fa-solid fa-circle-check me-1"></i> Freelance</span>
+            <span class="info-value" style="color:var(--success);font-weight:600"><%= about.freelance_status %></span>
+          </div>
+          <% } %>
+          <% if (typeof about !== 'undefined' && about && about.address) { %>
+          <div class="about-info-item">
+            <span class="info-label"><i class="fa-solid fa-map-marker-alt me-1"></i> Address</span>
+            <span class="info-value"><%= about.address %></span>
+          </div>
+          <% } %>
+        </div>
+
+        <div class="d-flex gap-3 flex-wrap">
+          <% if (showContact) { %>
+          <a href="#contact" class="btn-primary-grad">
+            <i class="fa-solid fa-paper-plane"></i> Contact Me
+          </a>
+          <% } %>
+          <% if (typeof hero !== 'undefined' && hero && hero.resume) { %>
+          <a href="<%= base_url %>/uploads/resumes/<%= hero.resume %>" target="_blank" class="btn-outline-grad" style="color:var(--primary);border-color:rgba(99,102,241,.4);">
+            <i class="fa-solid fa-download"></i> Download CV
+          </a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<% if (showSkills) { %>
+<!-- ═══════════════════════════════════════════════════
+     SKILLS SECTION
+═══════════════════════════════════════════════════ -->
+<section id="skills" class="skills-section">
+  <div class="container">
+    <div class="section-header text-center" data-aos="fade-up">
+      <div class="section-tag"><i class="fa-solid fa-bolt me-1"></i> What I Know</div>
+      <h2 class="section-title">My <span>Skills</span></h2>
+      <p class="section-subtitle">Technologies and tools I work with professionally</p>
+    </div>
+
+    <% 
+    const skillsByCategory = {};
+    if (typeof skills !== 'undefined' && skills && skills.length > 0) {
+      skills.forEach(s => {
+        const cat = s.category || 'General';
+        if (!skillsByCategory[cat]) {
+          skillsByCategory[cat] = [];
+        }
+        skillsByCategory[cat].push(s);
+      });
+    %>
+    <!-- Skill Progress Bars -->
+    <div class="row g-4">
+      <% Object.keys(skillsByCategory).forEach(cat => {
+           const catSkills = skillsByCategory[cat];
+      %>
+      <div class="col-12" data-aos="fade-up">
+        <h5 class="skill-category-title"><%= cat %></h5>
+      </div>
+      <% catSkills.forEach(s => { %>
+      <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="skill-item">
+          <div class="skill-header">
+            <span class="skill-name"><%= s.skill_name %></span>
+            <span class="skill-pct"><%= parseInt(s.percentage) %>%</span>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-bar-fill" data-width="<%= parseInt(s.percentage) %>"></div>
+          </div>
+        </div>
+      </div>
+      <% }); %>
+      <% }); %>
+    </div>
+    <% } else { %>
+    <p class="text-center text-muted">No skills added yet.</p>
+    <% } %>
+  </div>
+</section>
+<% } %>
+
+<% if (showEducation) { %>
+<!-- ═══════════════════════════════════════════════════
+     EDUCATION SECTION
+═══════════════════════════════════════════════════ -->
+<section id="education" class="education-section">
+  <div class="container">
+    <div class="section-header text-center" data-aos="fade-up">
+      <div class="section-tag"><i class="fa-solid fa-graduation-cap me-1"></i> My Background</div>
+      <h2 class="section-title">My <span>Education</span></h2>
+      <p class="section-subtitle">Academic qualifications and achievements</p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <div class="timeline">
+          <% if (typeof education !== 'undefined' && education && education.length > 0) {
+            education.forEach(ed => { %>
+          <div class="timeline-item" data-aos="fade-up">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card">
+              <span class="timeline-badge">
+                <i class="fa-solid fa-calendar-days"></i>
+                <%= ed.start_year %> <%= ed.end_year ? '– ' + ed.end_year : '' %>
+              </span>
+              <h5><%= ed.degree %><%= ed.branch ? ' – ' + ed.branch : '' %></h5>
+              <div class="org">
+                <i class="fa-solid fa-building-columns"></i>
+                <%= ed.institute %>
+              </div>
+              <% if (ed.description) { %>
+              <p><%- nl2br(ed.description) %></p>
+              <% } %>
+              <% if (ed.cgpa) { %>
+              <span class="cgpa-badge">
+                <i class="fa-solid fa-award me-1"></i>
+                <%= (ed.cgpa.includes('%') || ed.cgpa.toLowerCase().includes('cgpa')) ? ed.cgpa : 'CGPA / Percentage: ' + ed.cgpa %>
+              </span>
+              <% } %>
+            </div>
+          </div>
+          <% }) } else { %>
+          <p class="text-center text-muted">No education records yet.</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<% if (showExperience) { %>
+<!-- ═══════════════════════════════════════════════════
+     EXPERIENCE SECTION
+═══════════════════════════════════════════════════ -->
+<section id="experience" class="experience-section">
+  <div class="container">
+    <div class="section-header text-center" data-aos="fade-up">
+      <div class="section-tag"><i class="fa-solid fa-briefcase me-1"></i> Work History</div>
+      <h2 class="section-title">My <span>Experience</span></h2>
+      <p class="section-subtitle">Where I have worked and what I have built</p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <div class="timeline">
+          <% if (typeof experience !== 'undefined' && experience && experience.length > 0) {
+            experience.forEach(exp => { %>
+          <div class="timeline-item" data-aos="fade-up">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card">
+              <span class="timeline-badge">
+                <i class="fa-solid fa-clock"></i> <%= exp.duration %>
+              </span>
+              <h5><%= exp.position %></h5>
+              <div class="org">
+                <i class="fa-solid fa-building"></i> <%= exp.company %>
+              </div>
+              <% if (exp.description) { %>
+              <p><%- nl2br(exp.description) %></p>
+              <% } %>
+            </div>
+          </div>
+          <% }) } else { %>
+          <p class="text-center text-muted">No experience records yet.</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<% if (showInternship) { %>
+<!-- ═══════════════════════════════════════════════════
+     INTERNSHIP SECTION
+═══════════════════════════════════════════════════ -->
+<section id="internship" class="education-section">
+  <div class="container">
+    <div class="section-header text-center" data-aos="fade-up">
+      <div class="section-tag"><i class="fa-solid fa-laptop-code me-1"></i> Practical Experience</div>
+      <h2 class="section-title">My <span>Internships</span></h2>
+      <p class="section-subtitle">Hands-on learning and industry projects</p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <div class="timeline">
+          <% if (typeof internships !== 'undefined' && internships && internships.length > 0) {
+            internships.forEach(int => { %>
+          <div class="timeline-item" data-aos="fade-up">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card">
+              <span class="timeline-badge">
+                <i class="fa-solid fa-calendar-days"></i> <%= int.duration %>
+              </span>
+              <h5><%= int.role %></h5>
+              <div class="org">
+                <i class="fa-solid fa-building"></i> <%= int.company %>
+                <% if (int.location) { %>
+                <span class="ms-2 text-muted small"><i class="fa-solid fa-location-dot me-1"></i><%= int.location %></span>
+                <% } %>
+              </div>
+              <% if (int.description) { %>
+              <p><%- nl2br(int.description) %></p>
+              <% } %>
+              <% if (int.certificate_link) { %>
+              <a href="<%= int.certificate_link %>" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary mt-2">
+                <i class="fa-solid fa-certificate me-1"></i> View Certificate / Verification
+              </a>
+              <% } %>
+            </div>
+          </div>
+          <% }) } else { %>
+          <p class="text-center text-muted">No internship records added yet.</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<% if (showProjects) { %>
+<!-- ═══════════════════════════════════════════════════
+     PROJECTS SECTION
+═══════════════════════════════════════════════════ -->
+<section id="projects" class="projects-section">
+  <div class="container">
+    <div class="section-header text-center" data-aos="fade-up">
+      <div class="section-tag"><i class="fa-solid fa-diagram-project me-1"></i> My Work</div>
+      <h2 class="section-title">Recent <span>Projects</span></h2>
+      <p class="section-subtitle">A showcase of things I have built</p>
+    </div>
+
+    <div class="row g-4">
+      <% if (typeof projects !== 'undefined' && projects && projects.length > 0) {
+        projects.forEach(p => {
+          const pImg = p.image
+            ? base_url + '/uploads/projects/' + p.image
+            : base_url + '/assets/images/project-placeholder.png';
+          const techs = (p.technologies || '').split(',').map(t => t.trim()).filter(Boolean);
+      %>
+      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="project-card">
+          <div class="project-img-wrap">
+            <img src="<%= pImg %>" alt="<%= p.title %>">
+            <div class="project-overlay">
+              <% if (p.github_link) { %>
+              <a href="<%= p.github_link %>" target="_blank" rel="noopener" title="View Code">
+                <i class="fa-brands fa-github"></i>
+              </a>
+              <% } %>
+              <% if (p.live_link) { %>
+              <a href="<%= p.live_link %>" target="_blank" rel="noopener" title="Live Demo">
+                <i class="fa-solid fa-up-right-from-square"></i>
+              </a>
+              <% } %>
+            </div>
+            <% if (p.featured) { %>
+            <span class="featured-badge"><i class="fa-solid fa-star"></i> Featured</span>
+            <% } %>
+          </div>
+          <div class="project-body">
+            <% if (techs.length > 0) { %>
+            <div class="project-tech-tags">
+              <% techs.slice(0, 4).forEach(t => { %>
+              <span class="tech-tag"><%= t %></span>
+              <% }) %>
+            </div>
+            <% } %>
+            <h5><%= p.title %></h5>
+            <p><%= (p.description && p.description.length > 120) ? p.description.substring(0, 120) + '...' : (p.description || '') %></p>
+            <div class="project-links">
+              <% if (p.github_link) { %>
+              <a href="<%= p.github_link %>" target="_blank" class="link-code">
+                <i class="fa-brands fa-github"></i> Code
+              </a>
+              <% } %>
+              <% if (p.live_link) { %>
+              <a href="<%= p.live_link %>" target="_blank" class="link-demo">
+                <i class="fa-solid fa-up-right-from-square"></i> Live Demo
+              </a>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% }) } else { %>
+      <p class="text-center text-muted">No projects added yet.</p>
+      <% } %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<% if (showCertificates) { %>
+<!-- ═══════════════════════════════════════════════════
+     CERTIFICATES SECTION
+═══════════════════════════════════════════════════ -->
+<section id="certificates" class="certificates-section">
+  <div class="container">
+    <div class="section-header text-center" data-aos="fade-up">
+      <div class="section-tag"><i class="fa-solid fa-certificate me-1"></i> Credentials</div>
+      <h2 class="section-title">My <span>Certificates</span></h2>
+      <p class="section-subtitle">Courses and certifications I have earned</p>
+    </div>
+
+    <div class="row g-4">
+      <% if (typeof certificates !== 'undefined' && certificates && certificates.length > 0) {
+        certificates.forEach(c => {
+          const cImg = c.image
+            ? base_url + '/uploads/certificates/' + c.image
+            : null;
+      %>
+      <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="cert-card">
+          <% const isCertPdf = cImg && cImg.toLowerCase().endsWith('.pdf'); %>
+          <% if (cImg && !isCertPdf) { %>
+          <div class="cert-img-wrap">
+            <img src="<%= cImg %>" alt="<%= c.cert_name %>">
+          </div>
+          <% } else { %>
+          <div class="cert-body text-center" style="padding-top:28px">
+            <div class="cert-badge-icon"><i class="fa-solid <%= isCertPdf ? 'fa-file-pdf text-danger' : 'fa-certificate' %>" style="font-size: 3rem;"></i></div>
+          </div>
+          <% } %>
+          <div class="cert-body">
+            <h6><%= c.cert_name %></h6>
+            <div class="cert-meta">
+              <span><%= c.organization %></span>
+              <% if (c.cert_date) { %>
+              <span class="cert-dot"></span>
+              <span><%= c.cert_date %></span>
+              <% } %>
+            </div>
+            <% 
+               const actualLink = c.cert_url ? c.cert_url : (isCertPdf ? cImg : null);
+               if (actualLink) { 
+            %>
+            <a href="<%= actualLink %>" target="_blank" rel="noopener"
+               class="cert-link mt-2 d-inline-flex align-items-center gap-1"
+               style="font-size:.8rem;color:var(--primary);font-weight:600;">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> View Certificate
+            </a>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      <% }) } else { %>
+      <p class="text-center text-muted">No certificates added yet.</p>
+      <% } %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<% if (showServices) { %>
+<!-- ═══════════════════════════════════════════════════
+     SERVICES SECTION
+═══════════════════════════════════════════════════ -->
+<section id="services" class="services-section">
+  <div class="container">
+    <div class="section-header text-center" data-aos="fade-up">
+      <div class="section-tag"><i class="fa-solid fa-hand-sparkles me-1"></i> What I Offer</div>
+      <h2 class="section-title">My <span>Services</span></h2>
+      <p class="section-subtitle">Areas where I can help you achieve your goals</p>
+    </div>
+
+    <div class="row g-4">
+      <% if (typeof services !== 'undefined' && services && services.length > 0) {
+        services.forEach(sv => { %>
+      <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="100">
+        <div class="service-card">
+          <div class="service-icon"><i class="<%= sv.icon %>"></i></div>
+          <h5><%= sv.service_name %></h5>
+          <p><%= sv.description %></p>
+        </div>
+      </div>
+      <% }) } else { %>
+      <p class="text-center text-muted">No services added yet.</p>
+      <% } %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<% if (showContact) { %>
+<!-- ═══════════════════════════════════════════════════
+     CONTACT SECTION
+═══════════════════════════════════════════════════ -->
+<section id="contact" class="contact-section">
+  <div class="container">
+    <div class="section-header text-center" data-aos="fade-up">
+      <div class="section-tag"><i class="fa-solid fa-comments me-1"></i> Get In Touch</div>
+      <h2 class="section-title">Contact <span>Me</span></h2>
+      <p class="section-subtitle">Have a project? Let's talk about it</p>
+    </div>
+
+    <div class="row g-4">
+      <!-- Contact Info -->
+      <div class="col-lg-4" data-aos="fade-right">
+        <div class="contact-card">
+          <h5 class="fw-700 mb-4" style="color:var(--text-primary);font-weight:700;">
+            <i class="fa-solid fa-address-card me-2" style="color:var(--primary)"></i>Contact Info
+          </h5>
+          <% if (typeof contact !== 'undefined' && contact && contact.phone) { %>
+          <div class="contact-info-item">
+            <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+            <div class="contact-info-text">
+              <div class="ci-label">Phone</div>
+              <div class="ci-value"><%= contact.phone %></div>
+            </div>
+          </div>
+          <% } %>
+          <% if (typeof contact !== 'undefined' && contact && contact.email) { %>
+          <div class="contact-info-item">
+            <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
+            <div class="contact-info-text">
+              <div class="ci-label">Email</div>
+              <div class="ci-value"><%= contact.email %></div>
+            </div>
+          </div>
+          <% } %>
+          <% if (typeof contact !== 'undefined' && contact && contact.address) { %>
+          <div class="contact-info-item">
+            <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
+            <div class="contact-info-text">
+              <div class="ci-label">Address</div>
+              <div class="ci-value"><%= contact.address %></div>
+            </div>
+          </div>
+          <% } %>
+
+          <!-- Social Icons in contact card -->
+          <% if (typeof social !== 'undefined' && social) { %>
+          <div class="mt-4">
+            <p class="mb-2" style="font-size:.8rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;">Follow Me</p>
+            <div class="social-icons">
+              <% if (social.github) { %>
+              <a href="<%= social.github %>" target="_blank" class="social-icon"><i class="fa-brands fa-github"></i></a>
+              <% } %>
+              <% if (social.linkedin) { %>
+              <a href="<%= social.linkedin %>" target="_blank" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
+              <% } %>
+              <% if (social.instagram) { %>
+              <a href="<%= social.instagram %>" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+              <% } %>
+              <% if (social.twitter) { %>
+              <a href="<%= social.twitter %>" target="_blank" class="social-icon"><i class="fa-brands fa-x-twitter"></i></a>
+              <% } %>
+            </div>
+          </div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Contact Form or Map -->
+      <div class="col-lg-8" data-aos="fade-left">
+        <% if (typeof contact !== 'undefined' && contact && contact.map_link) { %>
+        <div class="map-wrap mb-4">
+          <iframe src="<%= contact.map_link %>" loading="lazy" allowfullscreen
+                  referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <% } %>
+
+        <!-- Contact Form -->
+        <div class="contact-card">
+          <h5 class="fw-700 mb-4" style="color:var(--text-primary);font-weight:700;">
+            <i class="fa-solid fa-paper-plane me-2" style="color:var(--primary)"></i>Send Message
+          </h5>
+          <div id="formAlert"></div>
+          <form id="contactForm" novalidate>
+            <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label-custom">Your Name *</label>
+                <input type="text" class="form-control-custom" id="senderName" name="name"
+                       placeholder="John Doe" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label-custom">Your Email *</label>
+                <input type="email" class="form-control-custom" id="senderEmail" name="email"
+                       placeholder="john@example.com" required>
+              </div>
+              <div class="col-12">
+                <label class="form-label-custom">Subject</label>
+                <input type="text" class="form-control-custom" id="senderSubject" name="subject"
+                       placeholder="Project Discussion">
+              </div>
+              <div class="col-12">
+                <label class="form-label-custom">Message *</label>
+                <textarea class="form-control-custom" id="senderMessage" name="message"
+                          rows="5" placeholder="Tell me about your project..." required></textarea>
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn-submit" id="submitBtn">
+                  <i class="fa-solid fa-paper-plane"></i>
+                  <span id="submitText">Send Message</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<%- include('includes/footer') %>
+
+<script>
+// Pass typed strings to JS
+const typedStrings = <%- typedJson %>;
+const baseUrl = '<%= base_url %>';
+</script>
+</body>
+</html>

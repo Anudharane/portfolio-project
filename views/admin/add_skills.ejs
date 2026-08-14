@@ -1,0 +1,105 @@
+<%- include('header') %>
+
+<div class="row g-3">
+  <!-- Add / Edit Form -->
+  <div class="col-lg-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6 class="card-title mb-3">
+          <i class="fa-solid fa-<%= editRow ? 'pen' : 'plus' %> me-2 text-primary"></i>
+          <%= editRow ? 'Edit Skill' : 'Add New Skill' %>
+        </h6>
+        <form method="POST" action="/admin/add_skills">
+          <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+          <input type="hidden" name="id" value="<%= editRow ? editRow.id : 0 %>">
+
+          <div class="mb-3">
+            <label class="form-label">Skill Name *</label>
+            <input type="text" name="skill_name" class="form-control" required
+                   value="<%= editRow ? e(editRow.skill_name) : '' %>" placeholder="e.g. Python">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">
+              Percentage (0–100)
+              <span class="ms-auto" id="pctDisplay" style="float:right;color:var(--primary);font-weight:700">
+                <%= editRow ? editRow.percentage : 80 %>%
+              </span>
+            </label>
+            <input type="range" name="percentage" min="0" max="100" class="form-range"
+                   value="<%= editRow ? editRow.percentage : 80 %>"
+                   data-display="pctDisplay"
+                   oninput="document.getElementById('pctDisplay').textContent=this.value+'%'">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Category</label>
+            <input type="text" name="category" class="form-control"
+                   value="<%= editRow ? e(editRow.category) : 'General' %>"
+                   placeholder="e.g. Frontend, Backend, Tools">
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="fa-solid fa-floppy-disk me-1"></i><%= editRow ? 'Update Skill' : 'Add Skill' %>
+          </button>
+          <% if (editRow) { %>
+          <a href="/admin/add_skills" class="btn btn-outline-secondary w-100 mt-2">
+            <i class="fa-solid fa-xmark me-1"></i>Cancel
+          </a>
+          <% } %>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skills Table -->
+  <div class="col-lg-8">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <table class="table table-hover align-middle" id="dataTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Skill</th>
+              <th>Category</th>
+              <th>Level</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% let idx = 1; skills.forEach(row => { %>
+            <tr>
+              <td><%= idx++ %></td>
+              <td class="fw-600"><%= e(row.skill_name) %></td>
+              <td><span class="badge bg-secondary"><%= e(row.category) %></span></td>
+              <td style="min-width:160px">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="progress flex-grow-1" style="height:8px">
+                    <div class="progress-bar" style="width:<%= row.percentage %>%"></div>
+                  </div>
+                  <span class="small fw-bold" style="color:var(--primary);min-width:32px">
+                    <%= row.percentage %>%
+                  </span>
+                </div>
+              </td>
+              <td class="text-end">
+                <a href="/admin/add_skills?edit=<%= row.id %>"
+                   class="btn btn-sm btn-outline-primary me-1" title="Edit">
+                  <i class="fa-solid fa-pen"></i>
+                </a>
+                <a href="/admin/add_skills?delete=<%= row.id %>"
+                   class="btn btn-sm btn-outline-danger btn-delete"
+                   data-label="<%= e(row.skill_name) %>" title="Delete">
+                  <i class="fa-solid fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('footer') %>

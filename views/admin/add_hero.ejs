@@ -1,0 +1,84 @@
+<%- include('header') %>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <form method="POST" action="/admin/add_hero?csrf_token=<%= csrfToken %>" enctype="multipart/form-data" class="row g-3">
+      <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+
+      <div class="col-md-6">
+        <label class="form-label">Full Name *</label>
+        <input type="text" name="name" class="form-control" required
+               value="<%= e(hero.name) %>" placeholder="e.g. John Doe">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Profession / Role *</label>
+        <input type="text" name="profession" class="form-control" required
+               value="<%= e(hero.profession) %>" placeholder="e.g. Full Stack Developer">
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Subtitle (Typed.js second string)</label>
+        <input type="text" name="subtitle" class="form-control"
+               value="<%= e(hero.subtitle || '') %>" placeholder="e.g. UI/UX Designer">
+        <small class="text-muted">Shown in the animated typing effect alongside Profession.</small>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Short Description / Introduction</label>
+        <textarea name="short_description" rows="4" class="form-control"
+                  placeholder="Write a brief intro about yourself..."><%= e(hero.short_description) %></textarea>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Profile Photo</label>
+        <input type="file" name="profile_photo" class="form-control img-preview-input"
+               data-preview="#previewPhoto" accept="image/*">
+        <% if (hero.profile_photo) { %>
+          <img id="previewPhoto"
+               src="/uploads/profile/<%= e(hero.profile_photo) %>"
+               class="upload-preview mt-2">
+        <% } else { %>
+          <img id="previewPhoto" class="upload-preview mt-2 d-none">
+        <% } %>
+        <small class="text-muted d-block mt-1">JPG, PNG, WEBP · Max 5 MB</small>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Background Image <small class="text-muted">(optional)</small></label>
+        <input type="file" name="background_image" class="form-control img-preview-input"
+               data-preview="#previewBg" accept="image/*">
+        <% if (hero.background_image) { %>
+          <img id="previewBg"
+               src="/uploads/profile/<%= e(hero.background_image) %>"
+               class="upload-preview mt-2">
+        <% } else { %>
+          <img id="previewBg" class="upload-preview mt-2 d-none">
+        <% } %>
+        <small class="text-muted d-block mt-1">Used as hero section background.</small>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Resume Document (PDF / DOC)</label>
+        <input type="file" name="resume" class="form-control" accept=".pdf,.doc,.docx">
+        <% if (hero.resume) { %>
+          <div class="mt-2">
+            <a href="/uploads/resumes/<%= e(hero.resume) %>" target="_blank" rel="noopener"
+               class="btn btn-sm btn-outline-info w-100">
+              <i class="fa-solid fa-file-pdf me-1"></i> Open Uploaded Resume (PDF)
+            </a>
+          </div>
+        <% } %>
+        <small class="text-muted d-block mt-1">Max 10 MB. PDF format opens directly in browser.</small>
+      </div>
+
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary px-5">
+          <i class="fa-solid fa-floppy-disk me-2"></i>Save Hero Section
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('footer') %>

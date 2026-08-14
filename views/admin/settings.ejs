@@ -1,0 +1,129 @@
+<%- include('header') %>
+
+<div class="row g-3">
+  <!-- General Settings -->
+  <div class="col-lg-7">
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <h6 class="card-title mb-4"><i class="fa-solid fa-sliders me-2 text-primary"></i>Website Branding &amp; SEO</h6>
+        <form method="POST" action="/admin/settings?csrf_token=<%= csrfToken %>" enctype="multipart/form-data" class="row g-3">
+          <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+          <input type="hidden" name="update_settings" value="1">
+
+          <div class="col-12">
+            <label class="form-label">Website Title</label>
+            <input type="text" name="website_title" class="form-control" value="<%= e(settings.website_title) %>" placeholder="My Portfolio">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Website Logo</label>
+            <input type="file" name="website_logo" class="form-control img-preview-input" data-preview="#previewLogo" accept="image/*">
+            <% if (settings.website_logo) { %>
+              <img id="previewLogo" src="/uploads/logo/<%= e(settings.website_logo) %>" class="upload-preview mt-2">
+            <% } else { %>
+              <img id="previewLogo" class="upload-preview mt-2 d-none">
+            <% } %>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Favicon</label>
+            <input type="file" name="favicon" class="form-control img-preview-input" data-preview="#previewFavicon" accept="image/*,.ico">
+            <% if (settings.favicon) { %>
+              <img id="previewFavicon" src="/uploads/logo/<%= e(settings.favicon) %>" class="upload-preview mt-2" style="width:32px;height:32px">
+            <% } else { %>
+              <img id="previewFavicon" class="upload-preview mt-2 d-none">
+            <% } %>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Footer Copyright Text</label>
+            <input type="text" name="footer_text" class="form-control" value="<%= e(settings.footer_text) %>" placeholder="All Rights Reserved.">
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">SEO Meta Description</label>
+            <textarea name="meta_desc" rows="2" class="form-control" placeholder="Brief summary of your portfolio for search engines"><%= e(settings.meta_desc || '') %></textarea>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">SEO Meta Keywords</label>
+            <input type="text" name="meta_keywords" class="form-control" value="<%= e(settings.meta_keywords || '') %>" placeholder="portfolio, developer, php, mysql">
+          </div>
+
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk me-1"></i> Save Branding Settings</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section Control & Password Change -->
+  <div class="col-lg-5">
+    <!-- Section Control Card -->
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <h6 class="card-title mb-2"><i class="fa-solid fa-layer-group me-2 text-info"></i>Portfolio Section Control</h6>
+        <p class="text-muted small mb-3">Enable or disable sections on the public website as per your wish.</p>
+
+        <form method="POST" action="/admin/dashboard">
+          <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+          <input type="hidden" name="update_sections" value="1">
+          <div class="row g-2">
+            <% 
+            const sections = {
+              show_hero: 'Hero Section',
+              show_about: 'About Section',
+              show_skills: 'Skills Section',
+              show_education: 'Education Section',
+              show_experience: 'Experience Section',
+              show_internship: 'Internship Section',
+              show_projects: 'Projects Section',
+              show_certificates: 'Certificates Section',
+              show_services: 'Services Section',
+              show_contact: 'Contact Section'
+            };
+            Object.keys(sections).forEach(key => {
+              const isChecked = settings[key] === undefined || Number(settings[key]) === 1;
+            %>
+            <div class="col-6">
+              <div class="form-check form-switch py-1">
+                <input class="form-check-input" type="checkbox" name="<%= key %>" id="<%= key %>" <%= isChecked ? 'checked' : '' %>>
+                <label class="form-check-label small text-light" for="<%= key %>"><%= sections[key] %></label>
+              </div>
+            </div>
+            <% }); %>
+          </div>
+          <button type="submit" class="btn btn-info text-white w-100 mt-3"><i class="fa-solid fa-check me-1"></i> Save Section Controls</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Password Change -->
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6 class="card-title mb-2"><i class="fa-solid fa-key me-2 text-warning"></i>Change Admin Password</h6>
+        <p class="text-muted small mb-3">Update your login credentials for the admin dashboard.</p>
+
+        <form method="POST" action="/admin/change_password">
+          <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+          <div class="mb-3">
+            <label class="form-label">Current Password</label>
+            <input type="password" name="current_password" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">New Password</label>
+            <input type="password" name="new_password" class="form-control" minlength="6" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Confirm New Password</label>
+            <input type="password" name="confirm_password" class="form-control" minlength="6" required>
+          </div>
+          <button type="submit" class="btn btn-outline-warning w-100"><i class="fa-solid fa-lock me-1"></i> Update Password</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('footer') %>

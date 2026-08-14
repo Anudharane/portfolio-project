@@ -1,0 +1,296 @@
+/* ================================================================
+   admin.css – Admin Dashboard
+   Modern dark sidebar, cards, tables, upload previews
+   ================================================================ */
+
+/* ── Variables ───────────────────────────────────────────────────── */
+:root {
+  --sidebar-w: 245px;
+  --sidebar-collapsed: 0px;
+  --topbar-h: 60px;
+
+  --admin-dark:       #0d0d20;
+  --admin-darker:     #090915;
+  --admin-card:       #141428;
+  --admin-border:     rgba(255,255,255,.07);
+  --admin-input-bg:   rgba(255,255,255,.05);
+
+  --primary:          #6366f1;
+  --primary-dark:     #4f46e5;
+  --grad-primary:     linear-gradient(135deg,#6366f1,#8b5cf6,#06b6d4);
+  --success:          #10b981;
+  --warning:          #f59e0b;
+  --danger:           #ef4444;
+  --info:             #06b6d4;
+  --secondary:        #64748b;
+  --text-main:        #e2e8f0;
+  --text-muted:       #64748b;
+  --radius-sm:        8px;
+  --radius-md:        14px;
+}
+
+/* ── Reset ───────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background: var(--admin-dark);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  margin: 0; overflow-x: hidden;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w); min-height: 100vh;
+  background: var(--admin-darker);
+  border-right: 1px solid var(--admin-border);
+  position: fixed; left: 0; top: 0; bottom: 0;
+  z-index: 1000; display: flex; flex-direction: column;
+  transition: transform .3s ease;
+  overflow-y: auto; overflow-x: hidden;
+}
+
+.sidebar-brand {
+  display: flex; align-items: center; gap: 12px;
+  padding: 22px 20px 16px;
+  font-size: 1rem; font-weight: 800; color: #fff;
+  border-bottom: 1px solid var(--admin-border);
+  flex-shrink: 0;
+}
+.sidebar-brand i {
+  width: 36px; height: 36px;
+  background: var(--grad-primary);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .9rem; flex-shrink: 0;
+}
+
+.sidebar-nav {
+  flex: 1; padding: 12px 10px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+
+.sidebar-nav .nav-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px; border-radius: var(--radius-sm);
+  color: rgba(255,255,255,.55);
+  font-size: .875rem; font-weight: 500;
+  text-decoration: none;
+  transition: all .2s ease;
+  white-space: nowrap;
+}
+.sidebar-nav .nav-link i {
+  width: 20px; text-align: center; flex-shrink: 0;
+  font-size: .95rem;
+}
+.sidebar-nav .nav-link:hover {
+  background: rgba(99,102,241,.12);
+  color: rgba(255,255,255,.9);
+}
+.sidebar-nav .nav-link.active {
+  background: rgba(99,102,241,.2);
+  color: #fff;
+  border-left: 3px solid var(--primary);
+}
+.sidebar-nav .nav-link.text-danger { color: rgba(239,68,68,.7) !important; }
+.sidebar-nav .nav-link.text-danger:hover { background: rgba(239,68,68,.12); color: #ef4444 !important; }
+
+/* ── Main Content ────────────────────────────────────────────────── */
+.main-content {
+  margin-left: var(--sidebar-w);
+  flex: 1; display: flex; flex-direction: column;
+  min-height: 100vh; min-width: 0;
+}
+
+/* ── Topbar ──────────────────────────────────────────────────────── */
+.topbar {
+  background: var(--admin-darker);
+  border-bottom: 1px solid var(--admin-border);
+  height: var(--topbar-h);
+  display: flex; align-items: center; gap: 16px;
+  padding: 0 24px;
+  position: sticky; top: 0; z-index: 100;
+}
+.topbar h5 { margin: 0; font-weight: 700; font-size: 1rem; color: var(--text-main); flex: 1; }
+
+.btn-toggle {
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted); width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all .2s; flex-shrink: 0;
+}
+.btn-toggle:hover { background: rgba(99,102,241,.2); color: #fff; }
+
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.admin-name {
+  font-size: .82rem; color: var(--text-muted); font-weight: 500;
+  display: flex; align-items: center; gap: 6px;
+}
+
+/* ── Page body ───────────────────────────────────────────────────── */
+.page-body { flex: 1; padding: 28px 24px; }
+
+/* ── Stat Cards ──────────────────────────────────────────────────── */
+.stat-card {
+  background: var(--admin-card);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--radius-md);
+  padding: 20px; display: flex; flex-direction: column; gap: 10px;
+  transition: all .25s ease;
+  border-left: 3px solid transparent;
+  text-decoration: none !important;
+}
+.stat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(0,0,0,.3); }
+.stat-card.border-primary  { border-left-color: var(--primary) !important; }
+.stat-card.border-success  { border-left-color: var(--success) !important; }
+.stat-card.border-warning  { border-left-color: var(--warning) !important; }
+.stat-card.border-info     { border-left-color: var(--info) !important; }
+.stat-card.border-danger   { border-left-color: var(--danger) !important; }
+.stat-card.border-secondary{ border-left-color: var(--secondary) !important; }
+
+.stat-icon {
+  width: 48px; height: 48px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.25rem; color: #fff; flex-shrink: 0;
+}
+.stat-icon.bg-primary   { background: linear-gradient(135deg,#6366f1,#8b5cf6); }
+.stat-icon.bg-success   { background: linear-gradient(135deg,#10b981,#059669); }
+.stat-icon.bg-warning   { background: linear-gradient(135deg,#f59e0b,#d97706); }
+.stat-icon.bg-info      { background: linear-gradient(135deg,#06b6d4,#0891b2); }
+.stat-icon.bg-danger    { background: linear-gradient(135deg,#ef4444,#dc2626); }
+.stat-icon.bg-secondary { background: linear-gradient(135deg,#64748b,#475569); }
+
+.stat-value { font-size: 2rem; font-weight: 900; color: #fff; line-height: 1; }
+.stat-label { font-size: .72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+
+/* ── Cards ───────────────────────────────────────────────────────── */
+.card {
+  background: var(--admin-card) !important;
+  border: 1px solid var(--admin-border) !important;
+  border-radius: var(--radius-md) !important;
+  color: var(--text-main) !important;
+}
+.card-title { font-weight: 700; color: var(--text-main) !important; }
+
+/* ── Forms ───────────────────────────────────────────────────────── */
+.form-label { color: rgba(255,255,255,.65); font-size: .78rem; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+
+.form-control, .form-select {
+  background: var(--admin-input-bg) !important;
+  border: 1px solid var(--admin-border) !important;
+  border-radius: var(--radius-sm) !important;
+  color: var(--text-main) !important;
+  font-size: .9rem !important;
+  transition: all .2s;
+}
+.form-control:focus, .form-select:focus {
+  background: rgba(255,255,255,.08) !important;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px rgba(99,102,241,.2) !important;
+  color: #fff !important;
+}
+.form-control::placeholder { color: #475569 !important; }
+textarea.form-control { resize: vertical; }
+
+/* ── Buttons (Bootstrap overrides) ──────────────────────────────── */
+.btn { font-weight: 600; border-radius: var(--radius-sm) !important; font-size: .875rem !important; }
+.btn-primary {
+  background: var(--grad-primary) !important;
+  border: none !important;
+  box-shadow: 0 4px 16px rgba(99,102,241,.4) !important;
+}
+.btn-primary:hover { box-shadow: 0 6px 24px rgba(99,102,241,.55) !important; transform: translateY(-1px); }
+.btn-outline-secondary { border-color: var(--admin-border) !important; color: var(--text-muted) !important; }
+.btn-outline-secondary:hover { background: rgba(255,255,255,.08) !important; color: #fff !important; }
+.btn-outline-danger { border-color: rgba(239,68,68,.4) !important; color: var(--danger) !important; }
+.btn-outline-danger:hover { background: rgba(239,68,68,.15) !important; }
+.btn-outline-primary { border-color: rgba(99,102,241,.4) !important; color: var(--primary) !important; }
+.btn-outline-primary:hover { background: rgba(99,102,241,.15) !important; }
+.btn-outline-warning { border-color: rgba(245,158,11,.4) !important; color: var(--warning) !important; }
+.btn-outline-warning:hover { background: rgba(245,158,11,.1) !important; }
+
+/* ── Table ───────────────────────────────────────────────────────── */
+.table { color: var(--text-main) !important; }
+.table thead th {
+  background: rgba(255,255,255,.04) !important;
+  color: var(--text-muted) !important;
+  font-size: .72rem !important; font-weight: 700 !important;
+  text-transform: uppercase; letter-spacing: 1px;
+  border-color: var(--admin-border) !important;
+}
+.table tbody td { border-color: var(--admin-border) !important; vertical-align: middle; font-size: .875rem; }
+.table-hover tbody tr:hover { background: rgba(255,255,255,.04) !important; }
+
+/* ── DataTables overrides ────────────────────────────────────────── */
+.dataTables_wrapper .dataTables_filter input {
+  background: var(--admin-input-bg) !important;
+  border: 1px solid var(--admin-border) !important;
+  color: var(--text-main) !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 6px 12px !important;
+}
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_filter label { color: var(--text-muted) !important; font-size: .82rem !important; }
+.dataTables_wrapper .page-link {
+  background: var(--admin-input-bg) !important;
+  border-color: var(--admin-border) !important;
+  color: var(--text-muted) !important;
+}
+.dataTables_wrapper .page-item.active .page-link { background: var(--primary) !important; border-color: var(--primary) !important; color: #fff !important; }
+
+/* ── Upload preview ──────────────────────────────────────────────── */
+.upload-preview {
+  max-width: 180px; max-height: 120px;
+  object-fit: cover; border-radius: var(--radius-sm);
+  border: 1px solid var(--admin-border);
+  margin-top: 8px;
+}
+.table-thumb {
+  width: 52px; height: 40px; object-fit: cover;
+  border-radius: 6px; border: 1px solid var(--admin-border);
+}
+
+/* ── Progress bar ────────────────────────────────────────────────── */
+.progress { background: rgba(255,255,255,.06) !important; border-radius: 50px !important; }
+.progress-bar { background: var(--grad-primary) !important; border-radius: 50px !important; font-size: .75rem !important; }
+
+/* ── Alerts ──────────────────────────────────────────────────────── */
+.alert-success { background: rgba(16,185,129,.12) !important; border-color: rgba(16,185,129,.3) !important; color: #6ee7b7 !important; }
+.alert-danger  { background: rgba(239,68,68,.12)  !important; border-color: rgba(239,68,68,.3)  !important; color: #fca5a5 !important; }
+
+/* ── Badge ───────────────────────────────────────────────────────── */
+.badge { font-weight: 600; }
+
+/* ── Mobile sidebar ──────────────────────────────────────────────── */
+@media (max-width: 991px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.show { transform: translateX(0); }
+  .main-content { margin-left: 0; }
+  .page-body { padding: 20px 16px; }
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--admin-darker); }
+::-webkit-scrollbar-thumb { background: rgba(99,102,241,.4); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+/* ── Text helpers ────────────────────────────────────────────────── */
+.text-muted { color: var(--text-muted) !important; }
+.text-primary { color: var(--primary) !important; }
+code { background: rgba(255,255,255,.08); color: #a5b4fc; padding: 2px 8px; border-radius: 4px; font-size: .85rem; }
+
+/* ── Sidebar divider ─────────────────────────────────────────────── */
+.sidebar-divider {
+  height: 1px; background: var(--admin-border);
+  margin: 8px 10px;
+}
+.sidebar-section-label {
+  font-size: .65rem; font-weight: 700;
+  color: rgba(255,255,255,.25); text-transform: uppercase; letter-spacing: 1.5px;
+  padding: 8px 14px 4px;
+}

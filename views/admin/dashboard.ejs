@@ -1,0 +1,111 @@
+<%- include('header') %>
+
+<div class="row g-3 mb-4">
+  <% 
+  const cards = [
+      { label: 'Total Skills', value: stats.skills, icon: 'fa-chart-simple', color: 'primary', link: '/admin/add_skills' },
+      { label: 'Total Projects', value: stats.projects, icon: 'fa-diagram-project', color: 'success', link: '/admin/add_projects' },
+      { label: 'Total Certificates', value: stats.certificates, icon: 'fa-certificate', color: 'warning', link: '/admin/add_certificates' },
+      { label: 'Total Education', value: stats.education, icon: 'fa-graduation-cap', color: 'info', link: '/admin/add_education' },
+      { label: 'Total Experience', value: stats.experience, icon: 'fa-briefcase', color: 'danger', link: '/admin/add_experience' },
+      { label: 'Total Internships', value: stats.internships, icon: 'fa-laptop-code', color: 'secondary', link: '/admin/add_internship' }
+  ];
+  cards.forEach(c => {
+  %>
+  <div class="col-md-4 col-lg-2">
+    <a href="<%= c.link %>" class="text-decoration-none">
+      <div class="stat-card border-<%= c.color %>">
+        <div class="stat-icon bg-<%= c.color %>"><i class="fa-solid <%= c.icon %>"></i></div>
+        <div class="stat-value"><%= c.value %></div>
+        <div class="stat-label"><%= c.label %></div>
+      </div>
+    </a>
+  </div>
+  <% }); %>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-7">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title mb-3">
+          <i class="fa-solid fa-circle-info me-2 text-primary"></i>Welcome back, <%= admin ? admin.name : 'Admin' %>!
+        </h5>
+        <p class="text-muted mb-3">
+          Your portfolio system is fully dynamic. All data displayed on the public site is loaded from your MySQL/SQLite database.
+        </p>
+
+        <div class="row g-3 mt-1">
+          <div class="col-md-6">
+            <div class="p-3 border border-secondary border-opacity-25 rounded bg-dark bg-opacity-25">
+              <h6 class="fw-bold mb-2"><i class="fa-solid fa-bolt text-warning me-2"></i>Quick Actions</h6>
+              <ul class="list-unstyled mb-0 small text-muted">
+                <li class="mb-1"><a href="/admin/add_hero" class="text-decoration-none text-light"><i class="fa-solid fa-angle-right me-1"></i> Edit Hero &amp; Profile Photo</a></li>
+                <li class="mb-1"><a href="/admin/add_internship" class="text-decoration-none text-light"><i class="fa-solid fa-angle-right me-1"></i> Manage Internships</a></li>
+                <li class="mb-1"><a href="/admin/add_projects" class="text-decoration-none text-light"><i class="fa-solid fa-angle-right me-1"></i> Add new project portfolio item</a></li>
+                <li class="mb-1"><a href="/admin/add_skills" class="text-decoration-none text-light"><i class="fa-solid fa-angle-right me-1"></i> Update skills &amp; percentages</a></li>
+                <li><a href="/admin/settings" class="text-decoration-none text-light"><i class="fa-solid fa-angle-right me-1"></i> Site branding &amp; credentials</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-3 border border-secondary border-opacity-25 rounded bg-dark bg-opacity-25">
+              <h6 class="fw-bold mb-2"><i class="fa-solid fa-shield-halved text-success me-2"></i>Security Status</h6>
+              <ul class="list-unstyled mb-0 small text-muted">
+                <li class="mb-1">✔ SQL Injection Protection Enabled</li>
+                <li class="mb-1">✔ XSS Output Escaping Enabled</li>
+                <li class="mb-1">✔ Session Authentication Protected</li>
+                <li>✔ Secure File Upload Filters Active</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dynamic Section Manager -->
+  <div class="col-lg-5">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h6 class="card-title mb-2"><i class="fa-solid fa-sliders me-2 text-info"></i>Section Visibility Manager</h6>
+        <p class="text-muted small mb-3">Add or remove portfolio sections on the public site as per your wish:</p>
+
+        <form method="POST" action="/admin/dashboard">
+          <input type="hidden" name="update_dashboard_sections" value="1">
+          <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+          <div class="row g-2">
+            <% 
+            const sections = {
+              show_hero: 'Hero Section',
+              show_about: 'About Section',
+              show_skills: 'Skills Section',
+              show_education: 'Education Section',
+              show_experience: 'Experience Section',
+              show_internship: 'Internship Section',
+              show_projects: 'Projects Section',
+              show_certificates: 'Certificates Section',
+              show_services: 'Services Section',
+              show_contact: 'Contact Section'
+            };
+            Object.keys(sections).forEach(key => {
+              const isChecked = settings[key] === undefined || Number(settings[key]) === 1;
+            %>
+            <div class="col-6">
+              <div class="form-check form-switch py-1">
+                <input class="form-check-input" type="checkbox" name="<%= key %>" id="dash_<%= key %>" <%= isChecked ? 'checked' : '' %>>
+                <label class="form-check-label small text-light" for="dash_<%= key %>"><%= sections[key] %></label>
+              </div>
+            </div>
+            <% }); %>
+          </div>
+          <button type="submit" class="btn btn-info text-white w-100 mt-3">
+            <i class="fa-solid fa-check me-1"></i> Update Homepage Sections
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('footer') %>

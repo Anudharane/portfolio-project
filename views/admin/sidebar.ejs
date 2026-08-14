@@ -1,0 +1,39 @@
+<%
+const currentPath = typeof current !== 'undefined' ? current : '';
+function navItem(path, icon, label) {
+  const active = (currentPath === path) ? 'active' : '';
+  return `<a href="/admin/${path}" class="nav-link ${active}"><i class="${icon}"></i><span>${label}</span></a>`;
+}
+%>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <i class="fa-solid fa-code"></i>
+    <span>Portfolio Admin</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main</div>
+    <%- navItem('dashboard', 'fa-solid fa-gauge-high', 'Dashboard') %>
+
+    <div class="sidebar-section-label">Content Sections</div>
+    <%- navItem('add_hero', 'fa-solid fa-house', 'Hero Section') %>
+    <%- navItem('add_about', 'fa-solid fa-circle-info', 'About') %>
+    <%- navItem('add_skills', 'fa-solid fa-chart-simple', 'Skills') %>
+    <%- navItem('add_education', 'fa-solid fa-graduation-cap', 'Education') %>
+    <%- navItem('add_experience', 'fa-solid fa-briefcase', 'Experience') %>
+    <%- navItem('add_internship', 'fa-solid fa-laptop-code', 'Internships') %>
+    <%- navItem('add_projects', 'fa-solid fa-diagram-project', 'Projects') %>
+    <%- navItem('add_certificates', 'fa-solid fa-certificate', 'Certificates') %>
+    <%- navItem('add_services', 'fa-solid fa-concierge-bell', 'Services') %>
+
+    <div class="sidebar-section-label">Contact & Settings</div>
+    <%- navItem('messages', 'fa-solid fa-envelope-open-text', 'Messages') %>
+    <%- navItem('add_contact', 'fa-solid fa-address-book', 'Contact Info') %>
+    <%- navItem('add_social', 'fa-brands fa-share-nodes', 'Social Links') %>
+    <%- navItem('settings', 'fa-solid fa-gear', 'Settings') %>
+
+    <div class="sidebar-divider"></div>
+    <a href="/logout" class="nav-link text-danger" onclick="return confirm('Log out of the admin dashboard?')">
+      <i class="fa-solid fa-right-from-bracket"></i><span>Logout</span>
+    </a>
+  </nav>
+</div>

@@ -1,0 +1,111 @@
+<%- include('header') %>
+
+<div class="row g-3">
+  <div class="col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6 class="card-title mb-3">
+          <i class="fa-solid fa-graduation-cap me-2 text-primary"></i>
+          <%= editRow ? 'Edit Education' : 'Add Education' %>
+        </h6>
+        <form method="POST" action="/admin/add_education" class="row g-2">
+          <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+          <input type="hidden" name="id" value="<%= editRow ? editRow.id : 0 %>">
+
+          <div class="col-12">
+            <label class="form-label">Institute / University *</label>
+            <input type="text" name="institute" class="form-control" required
+                   value="<%= editRow ? e(editRow.institute) : '' %>"
+                   placeholder="e.g. University of Mumbai">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Degree *</label>
+            <input type="text" name="degree" class="form-control" required
+                   value="<%= editRow ? e(editRow.degree) : '' %>"
+                   placeholder="e.g. B.Tech / B.E.">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Branch / Field</label>
+            <input type="text" name="branch" class="form-control"
+                   value="<%= editRow ? e(editRow.branch) : '' %>"
+                   placeholder="e.g. Computer Engineering">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Start Year</label>
+            <input type="text" name="start_year" class="form-control"
+                   value="<%= editRow ? e(editRow.start_year) : '' %>" placeholder="2020">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">End Year</label>
+            <input type="text" name="end_year" class="form-control"
+                   value="<%= editRow ? e(editRow.end_year) : '' %>" placeholder="2024 or Present">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">CGPA / Percentage</label>
+            <input type="text" name="cgpa" class="form-control"
+                   value="<%= editRow ? e(editRow.cgpa) : '' %>" placeholder="e.g. 8.5 CGPA or 73%">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Description</label>
+            <textarea name="description" rows="3" class="form-control"
+                      placeholder="Key courses, achievements..."><%= editRow ? e(editRow.description) : '' %></textarea>
+          </div>
+          <div class="col-12 mt-1">
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="fa-solid fa-floppy-disk me-1"></i><%= editRow ? 'Update' : 'Add' %>
+            </button>
+            <% if (editRow) { %>
+            <a href="/admin/add_education" class="btn btn-outline-secondary w-100 mt-2">
+              <i class="fa-solid fa-xmark me-1"></i>Cancel
+            </a>
+            <% } %>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <table class="table table-hover align-middle" id="dataTable">
+          <thead>
+            <tr>
+              <th>#</th><th>Institute</th><th>Degree</th><th>Years</th><th>CGPA / Percentage</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% let idx = 1; education.forEach(row => { %>
+            <tr>
+              <td><%= idx++ %></td>
+              <td><%= e(row.institute) %></td>
+              <td>
+                <%= e(row.degree) %>
+                <% if (row.branch) { %><br>
+                <small class="text-muted"><%= e(row.branch) %></small>
+                <% } %>
+              </td>
+              <td class="small"><%= e(row.start_year) %> – <%= e(row.end_year) %></td>
+              <td><span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25"><%= e(row.cgpa) %></span></td>
+              <td class="text-end">
+                <a href="/admin/add_education?edit=<%= row.id %>"
+                   class="btn btn-sm btn-outline-primary me-1">
+                  <i class="fa-solid fa-pen"></i>
+                </a>
+                <a href="/admin/add_education?delete=<%= row.id %>"
+                   class="btn btn-sm btn-outline-danger btn-delete"
+                   data-label="<%= e(row.degree) %>">
+                  <i class="fa-solid fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('footer') %>

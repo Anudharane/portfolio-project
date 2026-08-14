@@ -1,0 +1,105 @@
+<%- include('header') %>
+
+<div class="row g-3">
+  <div class="col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6 class="card-title mb-3">
+          <i class="fa-solid fa-certificate me-2 text-primary"></i>
+          <%= editRow ? 'Edit Certificate' : 'Add Certificate' %>
+        </h6>
+        <form method="POST" action="/admin/add_certificates?csrf_token=<%= csrfToken %>" enctype="multipart/form-data" class="row g-2">
+          <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+          <input type="hidden" name="id" value="<%= editRow ? editRow.id : 0 %>">
+
+          <div class="col-12">
+            <label class="form-label">Certificate Name *</label>
+            <input type="text" name="cert_name" class="form-control" required
+                   value="<%= editRow ? e(editRow.cert_name) : '' %>"
+                   placeholder="Web Development Bootcamp">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Organization / Issuer</label>
+            <input type="text" name="organization" class="form-control"
+                   value="<%= editRow ? e(editRow.organization) : '' %>"
+                   placeholder="Udemy, Coursera...">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Date</label>
+            <input type="text" name="cert_date" class="form-control"
+                   value="<%= editRow ? e(editRow.cert_date) : '' %>"
+                   placeholder="January 2024">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Certificate URL</label>
+            <input type="url" name="cert_url" class="form-control"
+                   value="<%= editRow ? e(editRow.cert_url) : '' %>"
+                   placeholder="https://coursera.org/...">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Certificate Image</label>
+            <input type="file" name="image" class="form-control img-preview-input"
+                   data-preview="#previewCert" accept="image/*">
+            <% if (editRow && editRow.image) { %>
+              <img id="previewCert"
+                   src="/uploads/certificates/<%= e(editRow.image) %>"
+                   class="upload-preview mt-2">
+            <% } else { %>
+              <img id="previewCert" class="upload-preview mt-2 d-none">
+            <% } %>
+          </div>
+          <div class="col-12 mt-1">
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="fa-solid fa-floppy-disk me-1"></i><%= editRow ? 'Update' : 'Add' %>
+            </button>
+            <% if (editRow) { %>
+            <a href="/admin/add_certificates" class="btn btn-outline-secondary w-100 mt-2">Cancel</a>
+            <% } %>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <table class="table table-hover align-middle" id="dataTable">
+          <thead>
+            <tr><th>#</th><th>Img</th><th>Name</th><th>Organization</th><th>Date</th><th class="text-end">Actions</th></tr>
+          </thead>
+          <tbody>
+            <% let idx = 1; certificates.forEach(row => { %>
+            <tr>
+              <td><%= idx++ %></td>
+              <td>
+                <% if (row.image) { %>
+                <img src="/uploads/certificates/<%= e(row.image) %>" class="table-thumb">
+                <% } else { %>
+                <i class="fa-solid fa-certificate text-warning"></i>
+                <% } %>
+              </td>
+              <td><%= e(row.cert_name) %></td>
+              <td><small><%= e(row.organization) %></small></td>
+              <td><small class="text-muted"><%= e(row.cert_date) %></small></td>
+              <td class="text-end">
+                <a href="/admin/add_certificates?edit=<%= row.id %>"
+                   class="btn btn-sm btn-outline-primary me-1">
+                  <i class="fa-solid fa-pen"></i>
+                </a>
+                <a href="/admin/add_certificates?delete=<%= row.id %>"
+                   class="btn btn-sm btn-outline-danger btn-delete"
+                   data-label="<%= e(row.cert_name) %>">
+                  <i class="fa-solid fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('footer') %>

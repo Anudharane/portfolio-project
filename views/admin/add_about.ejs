@@ -1,0 +1,82 @@
+<%- include('header') %>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <form method="POST" action="/admin/add_about" class="row g-3">
+      <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+
+      <div class="col-12">
+        <label class="form-label">Section Title</label>
+        <input type="text" name="title" class="form-control"
+               value="<%= e(about.title) %>" placeholder="About Me">
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Description / Bio</label>
+        <textarea name="description" rows="6" class="form-control"
+                  placeholder="Write something about yourself..."><%= e(about.description) %></textarea>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Birthday</label>
+        <input type="text" name="birthday" class="form-control"
+               value="<%= e(about.birthday) %>" placeholder="e.g. January 1, 2000">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Phone</label>
+        <input type="text" name="phone" class="form-control"
+               value="<%= e(about.phone) %>" placeholder="+91 9876543210">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-control"
+               value="<%= e(about.email) %>" placeholder="you@example.com">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Address</label>
+        <input type="text" name="address" class="form-control"
+               value="<%= e(about.address) %>" placeholder="123 Main Street">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">City</label>
+        <input type="text" name="city" class="form-control"
+               value="<%= e(about.city) %>" placeholder="Mumbai, India">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Degree</label>
+        <input type="text" name="degree" class="form-control"
+               value="<%= e(about.degree) %>" placeholder="B.Tech Computer Science">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Experience</label>
+        <input type="text" name="experience" class="form-control"
+               value="<%= e(about.experience) %>" placeholder="e.g. 2+ Years">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Freelance Status</label>
+        <select name="freelance_status" class="form-select">
+          <% ['Available', 'Not Available', 'Open to Offers'].forEach(opt => { %>
+          <option value="<%= e(opt) %>" <%= (about.freelance_status || '') === opt ? 'selected' : '' %>>
+            <%= e(opt) %>
+          </option>
+          <% }); %>
+        </select>
+      </div>
+
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary px-5">
+          <i class="fa-solid fa-floppy-disk me-2"></i>Save About Section
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('footer') %>

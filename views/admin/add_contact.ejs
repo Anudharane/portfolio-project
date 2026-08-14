@@ -1,0 +1,33 @@
+<%- include('header') %>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h6 class="card-title mb-4"><i class="fa-solid fa-address-book me-2 text-primary"></i>Manage Contact Information</h6>
+    <form method="POST" action="/admin/add_contact" class="row g-3">
+      <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+
+      <div class="col-md-6">
+        <label class="form-label"><i class="fa-solid fa-phone me-1"></i> Phone Number</label>
+        <input type="text" name="phone" class="form-control" value="<%= e(contact.phone) %>" placeholder="+91 9876543210">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label"><i class="fa-solid fa-envelope me-1"></i> Email Address</label>
+        <input type="email" name="email" class="form-control" value="<%= e(contact.email) %>" placeholder="you@example.com">
+      </div>
+      <div class="col-12">
+        <label class="form-label"><i class="fa-solid fa-location-dot me-1"></i> Physical Address</label>
+        <input type="text" name="address" class="form-control" value="<%= e(contact.address) %>" placeholder="123 Tech Park, Suite 400, San Francisco, CA">
+      </div>
+      <div class="col-12">
+        <label class="form-label"><i class="fa-solid fa-map-location-dot me-1"></i> Google Map Embed URL</label>
+        <textarea name="map_link" rows="3" class="form-control" placeholder="https://www.google.com/maps/embed?pb=..."><%= e(contact.map_link) %></textarea>
+        <small class="text-muted">Paste only the <code>src</code> attribute from Google Maps 'Share > Embed a map' HTML.</small>
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary px-4"><i class="fa-solid fa-floppy-disk me-1"></i> Save Contact Info</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('footer') %>

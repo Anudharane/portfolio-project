@@ -1,0 +1,99 @@
+<%- include('header') %>
+
+<div class="row g-3">
+  <div class="col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6 class="card-title mb-3">
+          <i class="fa-solid fa-laptop-code me-2 text-primary"></i>
+          <%= editRow ? 'Edit Internship' : 'Add Internship' %>
+        </h6>
+        <form method="POST" action="/admin/add_internship" class="row g-2">
+          <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+          <input type="hidden" name="id" value="<%= editRow ? editRow.id : 0 %>">
+
+          <div class="col-12">
+            <label class="form-label">Company / Organization *</label>
+            <input type="text" name="company" class="form-control" required
+                   value="<%= editRow ? e(editRow.company) : '' %>" placeholder="e.g. Google / Microsoft / Startup">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Role / Position *</label>
+            <input type="text" name="role" class="form-control" required
+                   value="<%= editRow ? e(editRow.role) : '' %>" placeholder="e.g. Web Development Intern">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Duration</label>
+            <input type="text" name="duration" class="form-control"
+                   value="<%= editRow ? e(editRow.duration) : '' %>" placeholder="e.g. Jun 2024 – Aug 2024">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Location / Work Mode</label>
+            <input type="text" name="location" class="form-control"
+                   value="<%= editRow ? e(editRow.location) : '' %>" placeholder="e.g. Remote / Mumbai, India">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Certificate / Verification Link</label>
+            <input type="url" name="certificate_link" class="form-control"
+                   value="<%= editRow ? e(editRow.certificate_link) : '' %>" placeholder="https://drive.google.com/...">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Description / Achievements</label>
+            <textarea name="description" rows="3" class="form-control"
+                      placeholder="Describe technologies used, key responsibilities, and outcomes..."><%= editRow ? e(editRow.description) : '' %></textarea>
+          </div>
+          <div class="col-12 mt-1">
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="fa-solid fa-floppy-disk me-1"></i><%= editRow ? 'Update Internship' : 'Add Internship' %>
+            </button>
+            <% if (editRow) { %>
+            <a href="/admin/add_internship" class="btn btn-outline-secondary w-100 mt-2">
+              <i class="fa-solid fa-xmark me-1"></i>Cancel
+            </a>
+            <% } %>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <table class="table table-hover align-middle" id="dataTable">
+          <thead>
+            <tr>
+              <th>#</th><th>Company</th><th>Role</th><th>Duration</th><th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% let idx = 1; internships.forEach(row => { %>
+            <tr>
+              <td><%= idx++ %></td>
+              <td>
+                <span class="fw-bold"><%= e(row.company) %></span>
+                <% if (row.location) { %><br><small class="text-muted"><i class="fa-solid fa-location-dot me-1"></i><%= e(row.location) %></small><% } %>
+              </td>
+              <td><%= e(row.role) %></td>
+              <td><small class="text-muted"><%= e(row.duration) %></small></td>
+              <td class="text-end">
+                <a href="/admin/add_internship?edit=<%= row.id %>"
+                   class="btn btn-sm btn-outline-primary me-1">
+                  <i class="fa-solid fa-pen"></i>
+                </a>
+                <a href="/admin/add_internship?delete=<%= row.id %>"
+                   class="btn btn-sm btn-outline-danger btn-delete"
+                   data-label="<%= e(row.role) %>">
+                  <i class="fa-solid fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('footer') %>

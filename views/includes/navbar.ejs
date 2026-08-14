@@ -1,0 +1,63 @@
+<%
+const base_url = typeof baseUrl !== 'undefined' ? baseUrl : '';
+const siteTitle = (typeof settings !== 'undefined' && settings.website_title) ? settings.website_title : 'My Portfolio';
+const logo = (typeof settings !== 'undefined' && settings.website_logo) ? base_url + '/uploads/logo/' + settings.website_logo : null;
+
+const showHero         = typeof settings === 'undefined' || settings.show_hero === undefined         || Number(settings.show_hero) === 1;
+const showAbout        = typeof settings === 'undefined' || settings.show_about === undefined        || Number(settings.show_about) === 1;
+const showSkills       = typeof settings === 'undefined' || settings.show_skills === undefined       || Number(settings.show_skills) === 1;
+const showEducation    = typeof settings === 'undefined' || settings.show_education === undefined    || Number(settings.show_education) === 1;
+const showExperience   = typeof settings === 'undefined' || settings.show_experience === undefined   || Number(settings.show_experience) === 1;
+const showInternship   = typeof settings === 'undefined' || settings.show_internship === undefined   || Number(settings.show_internship) === 1;
+const showProjects     = typeof settings === 'undefined' || settings.show_projects === undefined     || Number(settings.show_projects) === 1;
+const showCertificates = typeof settings === 'undefined' || settings.show_certificates === undefined || Number(settings.show_certificates) === 1;
+const showServices     = typeof settings === 'undefined' || settings.show_services === undefined     || Number(settings.show_services) === 1;
+const showContact      = typeof settings === 'undefined' || settings.show_contact === undefined      || Number(settings.show_contact) === 1;
+%>
+<nav class="navbar navbar-expand-lg navbar-portfolio fixed-top" id="mainNavbar">
+  <div class="container">
+    <a class="navbar-brand" href="#home">
+      <div class="brand-icon">
+        <% if (logo) { %>
+          <img src="<%= logo %>" alt="logo" height="22">
+        <% } else { %>
+          <i class="fa-solid fa-code"></i>
+        <% } %>
+      </div>
+      <span><%= siteTitle %></span>
+    </a>
+
+    <div class="d-flex align-items-center gap-2 order-lg-last">
+      <!-- Dark Mode Toggle -->
+      <button class="dark-toggle" id="darkToggle" title="Toggle Dark Mode">
+        <i class="fa-solid fa-moon" id="darkIcon"></i>
+      </button>
+      <!-- Mobile toggler -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+              aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars" style="color:var(--text-primary)"></i>
+      </button>
+    </div>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav mx-auto gap-1">
+        <% if (showHero) { %><li class="nav-item"><a class="nav-link" href="#home">Home</a></li><% } %>
+        <% if (showAbout) { %><li class="nav-item"><a class="nav-link" href="#about">About</a></li><% } %>
+        <% if (showSkills) { %><li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li><% } %>
+        <% if (showEducation) { %><li class="nav-item"><a class="nav-link" href="#education">Education</a></li><% } %>
+        <% if (showExperience) { %><li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li><% } %>
+        <% if (showInternship) { %><li class="nav-item"><a class="nav-link" href="#internship">Internships</a></li><% } %>
+        <% if (showProjects) { %><li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li><% } %>
+        <% if (showCertificates) { %><li class="nav-item"><a class="nav-link" href="#certificates">Certificates</a></li><% } %>
+        <% if (showServices) { %><li class="nav-item"><a class="nav-link" href="#services">Services</a></li><% } %>
+        <% if (showContact) { %><li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li><% } %>
+      </ul>
+      <% if (typeof hero !== 'undefined' && hero && hero.resume) { %>
+      <a href="<%= base_url %>/uploads/resumes/<%= hero.resume %>" target="_blank"
+         class="btn-primary-grad d-none d-lg-inline-flex">
+        <i class="fa-solid fa-download"></i> Resume
+      </a>
+      <% } %>
+    </div>
+  </div>
+</nav>

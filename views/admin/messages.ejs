@@ -1,0 +1,49 @@
+<%- include('header') %>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <table class="table table-hover align-middle" id="dataTable">
+      <thead>
+        <tr>
+          <th>Status</th>
+          <th>Sender</th>
+          <th>Email</th>
+          <th>Subject</th>
+          <th>Message</th>
+          <th>Date</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% messages.forEach(m => { %>
+        <tr class="<%= m.is_read ? '' : 'table-active fw-bold' %>">
+          <td>
+            <% if (m.is_read) { %>
+            <span class="badge bg-secondary">Read</span>
+            <% } else { %>
+            <span class="badge bg-danger">New</span>
+            <% } %>
+          </td>
+          <td><%= e(m.sender_name) %></td>
+          <td><a href="mailto:<%= e(m.sender_email) %>" class="text-info"><%= e(m.sender_email) %></a></td>
+          <td><%= e(m.subject) %></td>
+          <td><small class="text-muted"><%= e(m.message) %></small></td>
+          <td class="small text-muted"><%= e(m.created_at) %></td>
+          <td class="text-end">
+            <% if (!m.is_read) { %>
+            <a href="/admin/messages?read=<%= m.id %>" class="btn btn-sm btn-outline-success me-1" title="Mark Read">
+              <i class="fa-solid fa-check"></i>
+            </a>
+            <% } %>
+            <a href="/admin/messages?delete=<%= m.id %>" class="btn btn-sm btn-outline-danger btn-delete" data-label="message" title="Delete">
+              <i class="fa-solid fa-trash"></i>
+            </a>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include('footer') %>

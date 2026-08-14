@@ -1,0 +1,122 @@
+<%- include('header') %>
+
+<div class="row g-3">
+  <div class="col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6 class="card-title mb-3">
+          <i class="fa-solid fa-diagram-project me-2 text-primary"></i>
+          <%= editRow ? 'Edit Project' : 'Add Project' %>
+        </h6>
+        <form method="POST" action="/admin/add_projects?csrf_token=<%= csrfToken %>" enctype="multipart/form-data" class="row g-2">
+          <input type="hidden" name="csrf_token" value="<%= csrfToken %>">
+          <input type="hidden" name="id" value="<%= editRow ? editRow.id : 0 %>">
+
+          <div class="col-12">
+            <label class="form-label">Project Title *</label>
+            <input type="text" name="title" class="form-control" required
+                   value="<%= editRow ? e(editRow.title) : '' %>" placeholder="My Awesome Project">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Description</label>
+            <textarea name="description" rows="3" class="form-control"
+                      placeholder="Describe the project..."><%= editRow ? e(editRow.description) : '' %></textarea>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Technologies Used</label>
+            <input type="text" name="technologies" class="form-control"
+                   value="<%= editRow ? e(editRow.technologies) : '' %>"
+                   placeholder="PHP, MySQL, Bootstrap 5">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">GitHub URL</label>
+            <input type="url" name="github_link" class="form-control"
+                   value="<%= editRow ? e(editRow.github_link) : '' %>"
+                   placeholder="https://github.com/...">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Live Demo URL</label>
+            <input type="url" name="live_link" class="form-control"
+                   value="<%= editRow ? e(editRow.live_link) : '' %>"
+                   placeholder="https://...">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Project Image</label>
+            <input type="file" name="image" class="form-control img-preview-input"
+                   data-preview="#previewProject" accept="image/*">
+            <% if (editRow && editRow.image) { %>
+              <img id="previewProject"
+                   src="/uploads/projects/<%= e(editRow.image) %>"
+                   class="upload-preview mt-2">
+            <% } else { %>
+              <img id="previewProject" class="upload-preview mt-2 d-none">
+            <% } %>
+          </div>
+          <div class="col-12">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" name="featured" id="featuredCheck"
+                     <%= (editRow && editRow.featured) ? 'checked' : '' %>>
+              <label class="form-check-label text-muted" for="featuredCheck">
+                <i class="fa-solid fa-star me-1 text-warning"></i>Mark as Featured
+              </label>
+            </div>
+          </div>
+          <div class="col-12 mt-1">
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="fa-solid fa-floppy-disk me-1"></i><%= editRow ? 'Update Project' : 'Add Project' %>
+            </button>
+            <% if (editRow) { %>
+            <a href="/admin/add_projects" class="btn btn-outline-secondary w-100 mt-2">Cancel</a>
+            <% } %>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <table class="table table-hover align-middle" id="dataTable">
+          <thead>
+            <tr><th>#</th><th>Img</th><th>Title</th><th>Tech</th><th>★</th><th class="text-end">Actions</th></tr>
+          </thead>
+          <tbody>
+            <% let idx = 1; projects.forEach(row => { %>
+            <tr>
+              <td><%= idx++ %></td>
+              <td>
+                <% if (row.image) { %>
+                <img src="/uploads/projects/<%= e(row.image) %>" class="table-thumb">
+                <% } else { %>
+                <span class="text-muted small">—</span>
+                <% } %>
+              </td>
+              <td><%= e(row.title) %></td>
+              <td><small class="text-muted"><%= e(row.technologies) %></small></td>
+              <td>
+                <% if (row.featured) { %>
+                <i class="fa-solid fa-star text-warning"></i>
+                <% } %>
+              </td>
+              <td class="text-end">
+                <a href="/admin/add_projects?edit=<%= row.id %>"
+                   class="btn btn-sm btn-outline-primary me-1">
+                  <i class="fa-solid fa-pen"></i>
+                </a>
+                <a href="/admin/add_projects?delete=<%= row.id %>"
+                   class="btn btn-sm btn-outline-danger btn-delete"
+                   data-label="<%= e(row.title) %>">
+                  <i class="fa-solid fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('footer') %>
