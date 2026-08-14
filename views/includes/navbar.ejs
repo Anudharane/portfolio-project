@@ -51,6 +51,11 @@ const showContact      = typeof settings === 'undefined' || settings.show_contac
         <% if (showCertificates) { %><li class="nav-item"><a class="nav-link" href="#certificates">Certificates</a></li><% } %>
         <% if (showServices) { %><li class="nav-item"><a class="nav-link" href="#services">Services</a></li><% } %>
         <% if (showContact) { %><li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li><% } %>
+        <li class="nav-item">
+          <a class="nav-link" href="<%= (typeof admin !== 'undefined' && admin) ? '/admin/dashboard' : '/login' %>">
+            <i class="fa-solid fa-user-gear me-1"></i><%= (typeof admin !== 'undefined' && admin) ? 'Dashboard' : 'Login' %>
+          </a>
+        </li>
       </ul>
       <% if (typeof hero !== 'undefined' && hero && hero.resume) { %>
       <a href="<%= base_url %>/uploads/resumes/<%= hero.resume %>" target="_blank"
